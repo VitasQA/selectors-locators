@@ -1,9 +1,9 @@
-.gradle
+.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-.kotlin
+.kotlin/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -43,7 +43,9 @@ bin/
 .DS_Store
 
 # Игнорировать файлы базы данных
-data/*.mv.db
+data/
 
-libs/
+# Игнорировать все jar-файлы, кроме gradle-wrapper
 *.jar
+libs/
+!gradle/wrapper/gradle-wrapper.jar
