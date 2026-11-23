@@ -1,6 +1,7 @@
 package org.hw_06.webinar;
 
 import com.codeborne.selenide.Condition;
+import org.hw_06.utils.ConfigReader;
 import org.hw_06.webinar.api.ProductApiClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,24 +29,23 @@ public class WebinarTask3Test extends WebinarBaseTest {
     @DisplayName("3.2 Добавить несколько разных товаров и проверить общую цену")
     void testTotalPriceCalculation() {
         open("/");
-
-        executeJavaScript(
-                "document.querySelectorAll('.cart-item button[data-action=\"remove\"]').forEach(b => b.click());"
-        );
+        if ($(".cart-item").exists()) {
+            $("#open-cart-btn").click();
+            $$(".cart-item button[data-action='remove']").forEach(el -> {
+                if (el.isDisplayed()) el.click();
+            });
+            if ($("#close-modal").exists()) $("#close-modal").click();
+        }
         refresh();
         sleep(1000);
 
         $$(".product-card .btn").get(0).click();
         $$(".product-card .btn").get(1).click();
-
         $("#open-cart-btn").click();
 
-        int cartItemsCount = $$(".cart-item").size();
-        assertTrue(cartItemsCount == 2, "В корзине должно быть 2 товара, а найдено: " + cartItemsCount);
-
+        $$(".cart-item").shouldHave(com.codeborne.selenide.CollectionCondition.size(2));
         String totalText = $("#total-price").getText();
         int total = Integer.parseInt(totalText);
-        System.out.println("Итоговая сумма в корзине: " + total + " руб.");
         assertTrue(total > 0, "Сумма в корзине должна быть больше 0");
     }
 
@@ -53,8 +53,8 @@ public class WebinarTask3Test extends WebinarBaseTest {
     @DisplayName("3.3 Войти в админку и добавить товар. Проверить уведомление")
     void testAddProductViaAdmin() {
         open("/login");
-        $("#username").setValue("admin");
-        $("#password").setValue("secret123");
+        $("#username").setValue(ConfigReader.getAdminUsername());
+        $("#password").setValue(ConfigReader.getAdminPassword());
         $("button[type='submit']").click();
 
         String productName = "Товар " + System.currentTimeMillis();
@@ -69,8 +69,8 @@ public class WebinarTask3Test extends WebinarBaseTest {
     @DisplayName("3.4 Войти в админку и отредактировать товар")
     void testEditProductViaAdmin() {
         open("/login");
-        $("#username").setValue("admin");
-        $("#password").setValue("secret123");
+        $("#username").setValue(ConfigReader.getAdminUsername());
+        $("#password").setValue(ConfigReader.getAdminPassword());
         $("button[type='submit']").click();
 
         $("tbody#tbody tr:first-child td:nth-child(3) input").setValue("35");

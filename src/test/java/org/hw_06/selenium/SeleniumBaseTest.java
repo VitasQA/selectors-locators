@@ -1,9 +1,11 @@
 package org.hw_06.selenium;
 
+import org.hw_06.utils.ConfigReader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+
 import java.time.Duration;
 
 public class SeleniumBaseTest {
@@ -13,8 +15,8 @@ public class SeleniumBaseTest {
     public void setUp() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        driver.get("http://localhost:8080");
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(ConfigReader.getTimeout()));
+        driver.get(ConfigReader.getStandUrl());
     }
 
     @AfterEach

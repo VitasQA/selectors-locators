@@ -36,12 +36,10 @@ public class DragAndDropTest extends WebinarBaseTest {
         open("/");
 
         $(".product-card[data-name='Лук'] .btn").click();
-
         $("#open-cart-btn").click();
         $(".cart-item").shouldBe(Condition.visible);
 
         $(".cart-item button[data-action='remove']").click();
-
         $(".cart-item").shouldNotBe(Condition.visible);
     }
 }

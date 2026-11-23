@@ -2,18 +2,20 @@ package org.hw_06.webinar.api;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.hw_06.utils.ConfigReader;
+
 import static io.restassured.RestAssured.given;
 
 public class ProductApiClient {
     private static String sessionId;
 
     public static String loginAndGetSession() {
-        RestAssured.baseURI = "http://localhost:8080";
+        RestAssured.baseURI = ConfigReader.getApiUrl();
 
         Response response = given()
                 .contentType("application/x-www-form-urlencoded")
-                .formParam("username", "admin")
-                .formParam("password", "secret123")
+                .formParam("username", ConfigReader.getAdminUsername())
+                .formParam("password", ConfigReader.getAdminPassword())
                 .redirects().follow(true)
                 .when()
                 .post("/login")
@@ -44,7 +46,7 @@ public class ProductApiClient {
     }
 
     public static String createProduct(String name, int price) {
-        RestAssured.baseURI = "http://localhost:8080";
+        RestAssured.baseURI = ConfigReader.getApiUrl();
 
         if (sessionId == null) {
             loginAndGetSession();

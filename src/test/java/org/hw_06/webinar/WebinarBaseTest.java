@@ -3,6 +3,8 @@ package org.hw_06.webinar;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import io.restassured.RestAssured;
+import org.hw_06.utils.ConfigLogger;
+import org.hw_06.utils.ConfigReader;
 import org.hw_06.webinar.api.ProductApiClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,9 +17,13 @@ public class WebinarBaseTest {
 
     @BeforeEach
     public void setUp() {
-        RestAssured.baseURI = "http://localhost:8080";
+
+        ConfigLogger.printConfig();
+
+        RestAssured.baseURI = ConfigReader.getApiUrl();
         Configuration.browser = "chrome";
-        Configuration.baseUrl = "http://localhost:8080";
+        Configuration.baseUrl = ConfigReader.getStandUrl();
+        Configuration.timeout = ConfigReader.getTimeout();
         open("/");
     }
 

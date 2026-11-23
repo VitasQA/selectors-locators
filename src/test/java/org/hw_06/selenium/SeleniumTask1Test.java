@@ -1,8 +1,10 @@
 package org.hw_06.selenium;
 
+import org.hw_06.utils.ConfigReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SeleniumTask1Test extends SeleniumBaseTest {
@@ -10,17 +12,16 @@ public class SeleniumTask1Test extends SeleniumBaseTest {
     @Test
     @DisplayName("1.1 Добавить товар через админку, выйти на витрину и проверить")
     void testAddProductViaAdmin() {
-        driver.get("http://localhost:8080/login");
-        driver.findElement(By.id("username")).sendKeys("admin");
-        driver.findElement(By.id("password")).sendKeys("secret123");
+        driver.get(ConfigReader.getStandUrl() + "/login");
+        driver.findElement(By.id("username")).sendKeys(ConfigReader.getAdminUsername());
+        driver.findElement(By.id("password")).sendKeys(ConfigReader.getAdminPassword());
         driver.findElement(By.cssSelector("button[type='submit']")).click();
-
-        driver.findElement(By.id("n-name")).sendKeys("Помидоры");
-        driver.findElement(By.id("n-price")).sendKeys("15");
+        driver.findElement(By.id("n-name")).sendKeys(ConfigReader.getProductName());
+        driver.findElement(By.id("n-price")).sendKeys(String.valueOf(ConfigReader.getProductPrice()));
         driver.findElement(By.id("add-btn")).click();
-
-        driver.get("http://localhost:8080");
-        assertTrue(driver.findElement(By.xpath("//h4[text()='Помидоры']")).isDisplayed(), "Товар должен быть на витрине");
+        driver.get(ConfigReader.getStandUrl());
+        assertTrue(driver.findElement(By.xpath("//h4[text()='" + ConfigReader.getProductName() + "']")).isDisplayed(),
+                "Товар должен быть на витрине");
     }
 
     @Test
@@ -34,8 +35,8 @@ public class SeleniumTask1Test extends SeleniumBaseTest {
     @Test
     @DisplayName("1.3 Войти с неверным логином и паролем")
     void testLoginWithWrongCredentials() {
-        driver.get("http://localhost:8080/login");
-        driver.findElement(By.id("username")).sendKeys("admin");
+        driver.get(ConfigReader.getStandUrl() + "/login");
+        driver.findElement(By.id("username")).sendKeys("wrong_user");
         driver.findElement(By.id("password")).sendKeys("wrong_password");
         driver.findElement(By.cssSelector("button[type='submit']")).click();
         assertTrue(driver.getCurrentUrl().contains("/login"), "Должны остаться на странице логина");
