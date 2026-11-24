@@ -5,7 +5,7 @@ import com.codeborne.selenide.Selenide;
 import io.restassured.RestAssured;
 import org.hw_06.utils.ConfigLogger;
 import org.hw_06.utils.ConfigReader;
-import org.hw_06.webinar.api.ProductApiClient;
+import org.hw_09.api.ProductApiClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 

@@ -1,0 +1,98 @@
+package org.hw_09;
+
+import com.codeborne.selenide.Condition;
+import org.hw_09.asserts.*;
+import org.hw_09.pages.*;
+import org.hw_09.utils.ConfigReader;
+import org.hw_09.webinar.WebinarBaseTest; // Убедитесь, что WebinarBaseTest в этом пакете
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static com.codeborne.selenide.Selenide.*; // Добавлен * для $ и $$
+
+public class PageObjectTests extends WebinarBaseTest {
+
+    @Test
+    @DisplayName("2.1 Добавить 3 единицы товара и оплатить (до 300 руб)")
+    void testOrderThreeItems() {
+        MainPage mainPage = new MainPage();
+        MainPageAssert mainAssert = new MainPageAssert(mainPage);
+        mainAssert.checkCartButtonVisible();
+
+        // Добавляем 3 единицы товара
+        mainPage.clickAddToCart();
+        mainPage.clickAddToCart();
+        mainPage.clickAddToCart();
+        mainPage.openCart();
+
+        CartPage cartPage = new CartPage();
+        CartPageAssert cartAssert = new CartPageAssert(cartPage);
+
+        // Проверяем, что в корзине 3 единицы
+        cartAssert.checkQuantityOfFirstItem(3);
+
+        // Нажимаем "Оформить заказ"
+        cartPage.clickMakeOrder();
+
+        // Проверяем, что появилось уведомление об успешном заказе (toast),
+        // так как сумма < 300 руб. (алерта не будет)
+        $("#toast-container").shouldBe(Condition.visible);
+    }
+
+    @Test
+    @DisplayName("2.2 Добавить несколько разных товаров и проверить общую цену")
+    void testTotalPrice() {
+        MainPage mainPage = new MainPage();
+        MainPageAssert mainAssert = new MainPageAssert(mainPage);
+        mainAssert.checkProductCardsNotEmpty();
+
+        mainPage.clickAddToCartByIndex(0);
+        mainPage.clickAddToCartByIndex(1);
+        mainPage.openCart();
+
+        CartPage cartPage = new CartPage();
+        CartPageAssert cartAssert = new CartPageAssert(cartPage);
+        cartAssert.checkCartNotEmpty();
+        cartAssert.checkTotalPriceGreaterThanZero();
+    }
+
+    @Test
+    @DisplayName("2.3 Войти в админку и добавить товар")
+    void testAddProduct() {
+        MainPage mainPage = new MainPage();
+        mainPage.clickAdminButton();
+
+        LoginPage loginPage = new LoginPage();
+        LoginPageAssert loginAssert = new LoginPageAssert(loginPage);
+        loginAssert.checkUsernameVisible();
+        loginPage.login(ConfigReader.getAdminUsername(), ConfigReader.getAdminPassword());
+
+        AdminPage adminPage = new AdminPage();
+        String productName = "Новый товар " + System.currentTimeMillis(); // уникальное имя
+        adminPage.enterProductName(productName);
+        adminPage.enterProductPrice("100");
+        adminPage.clickAddButton();
+
+        AdminPageAssert adminAssert = new AdminPageAssert(adminPage);
+        // Проверяем, что товар появился в таблице
+        adminAssert.checkProductAddedToTable(productName);
+    }
+
+    @Test
+    @DisplayName("2.4 Войти в админку и отредактировать товар")
+    void testEditProduct() {
+        MainPage mainPage = new MainPage();
+        mainPage.clickAdminButton();
+
+        LoginPage loginPage = new LoginPage();
+        loginPage.login(ConfigReader.getAdminUsername(), ConfigReader.getAdminPassword());
+
+        AdminPage adminPage = new AdminPage();
+        adminPage.editFirstProductPrice("35");
+
+        open("/");
+        MainPage updatedMainPage = new MainPage();
+        MainPageAssert updatedMainAssert = new MainPageAssert(updatedMainPage);
+        updatedMainAssert.checkProductCardsNotEmpty();
+    }
+}

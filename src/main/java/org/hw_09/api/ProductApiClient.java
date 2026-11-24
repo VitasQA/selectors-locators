@@ -1,8 +1,8 @@
-package org.hw_06.webinar.api;
+package org.hw_09.api;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.hw_06.utils.ConfigReader;
+import org.hw_09.utils.ConfigReader;
 
 import static io.restassured.RestAssured.given;
 

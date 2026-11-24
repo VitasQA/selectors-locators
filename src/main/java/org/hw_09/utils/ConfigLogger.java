@@ -1,4 +1,4 @@
-package org.hw_06.utils;
+package org.hw_09.utils;
 
 public class ConfigLogger {
     public static void printConfig() {

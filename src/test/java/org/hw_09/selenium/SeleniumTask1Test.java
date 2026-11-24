@@ -1,4 +1,4 @@
-package org.hw_06.selenium;
+package org.hw_0.selenium;
 
 import org.hw_06.utils.ConfigReader;
 import org.junit.jupiter.api.DisplayName;

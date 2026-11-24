@@ -2,7 +2,7 @@ package org.hw_06.webinar;
 
 import com.codeborne.selenide.Condition;
 import org.hw_06.utils.ConfigReader;
-import org.hw_06.webinar.api.ProductApiClient;
+import org.hw_09.api.ProductApiClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
