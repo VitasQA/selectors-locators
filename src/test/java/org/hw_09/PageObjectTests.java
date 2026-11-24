@@ -4,11 +4,11 @@ import com.codeborne.selenide.Condition;
 import org.hw_09.asserts.*;
 import org.hw_09.pages.*;
 import org.hw_09.utils.ConfigReader;
-import org.hw_09.webinar.WebinarBaseTest; // Убедитесь, что WebinarBaseTest в этом пакете
+import org.hw_09.webinar.WebinarBaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Selenide.*; // Добавлен * для $ и $$
+import static com.codeborne.selenide.Selenide.*;
 
 public class PageObjectTests extends WebinarBaseTest {
 
@@ -19,7 +19,6 @@ public class PageObjectTests extends WebinarBaseTest {
         MainPageAssert mainAssert = new MainPageAssert(mainPage);
         mainAssert.checkCartButtonVisible();
 
-        // Добавляем 3 единицы товара
         mainPage.clickAddToCart();
         mainPage.clickAddToCart();
         mainPage.clickAddToCart();
@@ -28,14 +27,10 @@ public class PageObjectTests extends WebinarBaseTest {
         CartPage cartPage = new CartPage();
         CartPageAssert cartAssert = new CartPageAssert(cartPage);
 
-        // Проверяем, что в корзине 3 единицы
         cartAssert.checkQuantityOfFirstItem(3);
 
-        // Нажимаем "Оформить заказ"
         cartPage.clickMakeOrder();
 
-        // Проверяем, что появилось уведомление об успешном заказе (toast),
-        // так как сумма < 300 руб. (алерта не будет)
         $("#toast-container").shouldBe(Condition.visible);
     }
 
@@ -68,13 +63,12 @@ public class PageObjectTests extends WebinarBaseTest {
         loginPage.login(ConfigReader.getAdminUsername(), ConfigReader.getAdminPassword());
 
         AdminPage adminPage = new AdminPage();
-        String productName = "Новый товар " + System.currentTimeMillis(); // уникальное имя
+        String productName = "Новый товар " + System.currentTimeMillis();
         adminPage.enterProductName(productName);
         adminPage.enterProductPrice("100");
         adminPage.clickAddButton();
 
         AdminPageAssert adminAssert = new AdminPageAssert(adminPage);
-        // Проверяем, что товар появился в таблице
         adminAssert.checkProductAddedToTable(productName);
     }
 
