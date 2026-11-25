@@ -7,13 +7,12 @@ import io.restassured.RestAssured;
 
 public class AllureConfig {
     public static void setup() {
-        // 1. Листенер для Selenide (скриншоты, шаги)
+
         SelenideLogger.addListener("allure", new AllureSelenide()
                 .screenshots(true)
                 .savePageSource(true)
                 .includeSelenideSteps(true));
 
-        // 2. Фильтр для RestAssured (логирование API-запросов)
         RestAssured.filters(new AllureRestAssured());
     }
 }

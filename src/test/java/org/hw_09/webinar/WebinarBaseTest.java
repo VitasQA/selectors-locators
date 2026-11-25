@@ -18,7 +18,7 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class WebinarBaseTest {
     protected String createdProductId;
-    protected String createdProductName; // <-- НОВОЕ ПОЛЕ для имени товара
+    protected String createdProductName;
 
     @BeforeAll
     public static void setUpAllure() {
@@ -41,7 +41,6 @@ public class WebinarBaseTest {
     @AfterEach
     @Step("Удалить созданный товар (ID: {createdProductId}, Имя: {createdProductName})")
     public void tearDown() {
-        // 1. Если товар создан через API (есть ID) — удаляем по API
         if (createdProductId != null && !createdProductId.isEmpty()) {
             try {
                 String sessionId = ProductApiClient.getSessionId();
@@ -57,11 +56,9 @@ public class WebinarBaseTest {
             }
         }
 
-        // 2. Если товар создан через UI (есть имя, но нет ID) — удаляем через админку
         if (createdProductName != null && !createdProductName.isEmpty()) {
             try {
                 open("/admin");
-                // Ищем строку с нашим товаром и нажимаем "Удалить"
                 $("tbody#tbody input[value='" + createdProductName + "']")
                         .closest("tr")
                         .$(".btn-del")

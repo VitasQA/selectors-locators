@@ -76,7 +76,6 @@ public class PageObjectTests extends WebinarBaseTest {
         AdminPageAssert adminAssert = new AdminPageAssert(adminPage);
         adminAssert.checkProductAddedToTable(productName);
 
-        // Сохраняем имя для удаления в @AfterEach
         createdProductName = productName;
     }
 
