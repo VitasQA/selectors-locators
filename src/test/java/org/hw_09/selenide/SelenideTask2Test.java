@@ -1,8 +1,8 @@
-package org.hw_06.selenide;
+package org.hw_09.selenide;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
-import org.hw_06.utils.ConfigReader;
+import org.hw_09.utils.ConfigReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,7 @@
 package org.hw_09.api;
 
+import io.qameta.allure.Step;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.hw_09.utils.ConfigReader;
@@ -9,6 +11,11 @@ import static io.restassured.RestAssured.given;
 public class ProductApiClient {
     private static String sessionId;
 
+    static {
+        RestAssured.filters(new AllureRestAssured());
+    }
+
+    @Step("Получить сессию (JSESSIONID) через API")
     public static String loginAndGetSession() {
         RestAssured.baseURI = ConfigReader.getApiUrl();
 
@@ -45,6 +52,7 @@ public class ProductApiClient {
         return sessionId;
     }
 
+    @Step("Создать товар через API: {name}, цена {price}")
     public static String createProduct(String name, int price) {
         RestAssured.baseURI = ConfigReader.getApiUrl();
 

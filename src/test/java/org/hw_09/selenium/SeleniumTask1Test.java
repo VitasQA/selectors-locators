@@ -1,6 +1,6 @@
-package org.hw_0.selenium;
+package org.hw_09.selenium;
 
-import org.hw_06.utils.ConfigReader;
+import org.hw_09.utils.ConfigReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;

@@ -1,6 +1,6 @@
-package org.hw_06.selenium;
+package org.hw_09.selenium;
 
-import org.hw_06.utils.ConfigReader;
+import org.hw_09.utils.ConfigReader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;

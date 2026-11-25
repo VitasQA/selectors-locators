@@ -1,4 +1,4 @@
-package org.hw_06.webinar;
+package org.hw_09.webinar;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;

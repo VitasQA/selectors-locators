@@ -1,9 +1,11 @@
 package org.hw_09;
 
 import com.codeborne.selenide.Condition;
+import io.qameta.allure.Step;
 import org.hw_09.asserts.*;
 import org.hw_09.pages.*;
 import org.hw_09.utils.ConfigReader;
+import org.hw_09.utils.TestDataGenerator;
 import org.hw_09.webinar.WebinarBaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,11 +28,14 @@ public class PageObjectTests extends WebinarBaseTest {
 
         CartPage cartPage = new CartPage();
         CartPageAssert cartAssert = new CartPageAssert(cartPage);
-
         cartAssert.checkQuantityOfFirstItem(3);
 
         cartPage.clickMakeOrder();
+        checkToastVisible();
+    }
 
+    @Step("Проверить, что уведомление об успехе отображается")
+    private void checkToastVisible() {
         $("#toast-container").shouldBe(Condition.visible);
     }
 
@@ -63,13 +68,16 @@ public class PageObjectTests extends WebinarBaseTest {
         loginPage.login(ConfigReader.getAdminUsername(), ConfigReader.getAdminPassword());
 
         AdminPage adminPage = new AdminPage();
-        String productName = "Новый товар " + System.currentTimeMillis();
+        String productName = TestDataGenerator.getRandomProductName();
         adminPage.enterProductName(productName);
         adminPage.enterProductPrice("100");
         adminPage.clickAddButton();
 
         AdminPageAssert adminAssert = new AdminPageAssert(adminPage);
         adminAssert.checkProductAddedToTable(productName);
+
+        // Сохраняем имя для удаления в @AfterEach
+        createdProductName = productName;
     }
 
     @Test
