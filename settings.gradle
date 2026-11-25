@@ -1,0 +1,4 @@
+rootProject.name = 'selenium_selenide'
+include 'common'
+include 'api-tests'
+include 'ui-tests'

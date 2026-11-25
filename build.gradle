@@ -1,48 +1,32 @@
 plugins {
     id 'java'
-    id 'io.qameta.allure' version '3.0.2'
+    id 'io.qameta.allure' version '3.0.2' apply false
 }
 
-repositories {
-    mavenCentral()
+allprojects {
+    repositories { mavenCentral() }
+    group = 'org.hw_11'
+    version = '1.0-SNAPSHOT'
 }
 
-def allureVersion = "2.27.0"
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.qameta.allure'
 
-dependencies {
-    // Основные зависимости (main)
-    implementation 'com.codeborne:selenide:7.14.0'
-    implementation 'com.github.javafaker:javafaker:1.0.2'
-    implementation 'io.rest-assured:rest-assured:6.0.1'
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
 
-    // Тестовые зависимости
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.14.3'
-    testImplementation 'org.junit.platform:junit-platform-launcher:1.14.3'
-    testImplementation 'org.assertj:assertj-core:3.27.7'
-    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
-    testImplementation 'org.seleniumhq.selenium:selenium-java:4.21.0'
-
-    // Allure
-    implementation "io.qameta.allure:allure-selenide:${allureVersion}"
-    implementation "io.qameta.allure:allure-junit5:${allureVersion}"
-    implementation "io.qameta.allure:allure-rest-assured:${allureVersion}"
-
-    // AspectJ для работы @Step
-    testRuntimeOnly "org.aspectj:aspectjweaver:1.9.22"
-}
-
-test {
-    useJUnitPlatform()
-    // Подключаем AspectJ через javaagent
-    jvmArgs "-javaagent:${configurations.testRuntimeClasspath.find { it.name.contains('aspectjweaver') }}"
-    systemProperty 'allure.results.directory', "${project.buildDir}/allure-results"
-
-    testLogging {
-        events 'passed', 'skipped', 'failed'
-        exceptionFormat 'full'
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.14.3'
+        testImplementation 'org.junit.platform:junit-platform-launcher:1.14.3'
+        testImplementation 'org.assertj:assertj-core:3.27.7'
+        testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
+        testImplementation "io.qameta.allure:allure-junit5:2.27.0"
+        testRuntimeOnly 'org.aspectj:aspectjweaver:1.9.22'
     }
 }
 
-allure {
-    version = allureVersion
-}
+tasks.register('smokeApi') { dependsOn ':api-tests:test' }
+tasks.register('smokeUi') { dependsOn ':ui-tests:test' }
